@@ -54,17 +54,21 @@
 
       _routeChanged(route) {
         if (route === undefined || route.path === undefined || route.path === "undefined") {
-          // TODO fire event and may be go to the default page
+          // TODO (event) fallback route ?
         } else {
           var result = this.router.recognize(route.path);
-          var mainHandler = result[0].handler;
 
-          this.dispatchEvent(new CustomEvent('route-changed', {
-            detail: {
-              name: mainHandler.name,
-              queryParams: result.queryParams
-            }
-          }));
+          if (result === undefined || result === "undefined" || result.length <= 0) {
+            // TODO (event) fallback route ?
+          } else {
+            var mainHandler = result[0].handler;
+            this.dispatchEvent(new CustomEvent('route-changed', {
+              detail: {
+                name: mainHandler.name,
+                queryParams: result.queryParams
+              }
+            }));
+          }
         }
       }
     }
