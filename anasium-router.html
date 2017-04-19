@@ -56,15 +56,17 @@
         if (route === undefined || route.path === undefined || route.path === "undefined") {
           // TODO (event) fallback route ?
         } else {
-          var result = this.router.recognize(route.path);
+          var _result = this.router.recognize(route.path);
 
-          if (result === undefined || result === "undefined" || result.length <= 0) {
+          if (_result === undefined || _result === "undefined" || _result.length <= 0) {
             // TODO (event) fallback route ?
           } else {
-            var mainHandler = result[0].handler;
+            var result = _result[0];
+
             this.dispatchEvent(new CustomEvent('route-changed', {
               detail: {
-                name: mainHandler.name,
+                name: result.handler.name,
+                params: result.params,
                 queryParams: result.queryParams
               }
             }));
