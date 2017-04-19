@@ -66,6 +66,7 @@
             this.dispatchEvent(new CustomEvent('route-changed', {
               detail: {
                 name: result.handler.name,
+                route: this.route,
                 params: result.params,
                 queryParams: result.queryParams
               }
