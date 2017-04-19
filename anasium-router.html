@@ -1,0 +1,33 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`anasium-router`
+
+
+@demo demo/index.html
+-->
+<script src="../../node_modules/route-recognizer/dist/route-recognizer.js"></script>
+
+<dom-module id="anasium-router">
+  <script>
+    class AnasiumRouter extends Polymer.Element {
+      static get is() { return 'anasium-router'; }
+
+      static get properties() {
+        return {
+          route: Object
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        this.router = new RouteRecognizer();
+
+
+      }
+    }
+
+    window.customElements.define(AnasiumRouter.is, AnasiumRouter);
+  </script>
+</dom-module>
