@@ -1,17 +1,26 @@
 <link rel="import" href="../polymer/polymer.html">
 
+<script src="./route-recognizer.js"></script>
 <!--
 `anasium-router`
 
 
 @demo demo/index.html
 -->
-<script src="../../node_modules/route-recognizer/dist/route-recognizer.js"></script>
+
+<link rel="import" href="anasium-route.html">
 
 <dom-module id="anasium-router">
   <script>
     class AnasiumRouter extends Polymer.Element {
-      static get is() { return 'anasium-router'; }
+      constructor() {
+        super();
+        this.router = new RouteRecognizer();
+      }
+
+      static get is() {
+        return 'anasium-router';
+      }
 
       static get properties() {
         return {
@@ -21,10 +30,42 @@
 
       ready() {
         super.ready();
+        var routeElements = this.querySelectorAll('anasium-route');
 
-        this.router = new RouteRecognizer();
+        routeElements.forEach(function(routeElement) {
+          this.addRoute(routeElement.route);
+        }, this);
+      }
 
+      static get observers() {
+        return [
+          '_routeChanged(route)'
+        ]
+      }
 
+      addRoute(route) {
+        this.router.add([{
+          path: route.path,
+          handler: {
+            name: route.name
+          }
+        }]);
+      }
+
+      _routeChanged(route) {
+        if (route === undefined || route.path === undefined || route.path === "undefined") {
+          // TODO fire event and may be go to the default page
+        } else {
+          var result = this.router.recognize(route.path);
+          var mainHandler = result[0].handler;
+
+          this.dispatchEvent(new CustomEvent('route-changed', {
+            detail: {
+              name: mainHandler.name,
+              queryParams: result.queryParams
+            }
+          }));
+        }
       }
     }
 
