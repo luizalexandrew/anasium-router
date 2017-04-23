@@ -10,13 +10,19 @@
 
     static get properties() {
       return {
-        name: String,
-        path: String
+        name: {
+          type: String,
+          reflectToAttribute: true
+        },
+        path: {
+          type: String,
+          reflectToAttribute: true
+        }
       }
     }
 
     get route() {
-      return { name: this.name, path: this.path }
+      return { path: this.path }
     }
   }
 

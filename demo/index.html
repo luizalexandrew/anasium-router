@@ -11,6 +11,7 @@
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
     <link rel="import" href="../anasium-router.html">
+    <link rel="import" href="../anasium-route.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
     </style>
@@ -20,7 +21,13 @@
       <h3>Basic anasium-router demo</h3>
       <demo-snippet>
         <template>
-          <anasium-router></anasium-router>
+          <anasium-router>
+            <anasium-route name="login" path="/login/"></anasium-route>
+            <anasium-route name="register" path="/register/"></anasium-route>
+            <anasium-route name="players" path="/players/"></anasium-route>
+            <anasium-route name="players.detail" path="/register/:id/"></anasium-route>
+            <anasium-route name="players.edit" path="/register/:id/edit/"></anasium-route>
+          </anasium-router>
         </template>
       </demo-snippet>
     </div>

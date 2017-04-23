@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 
-<script src="./route-recognizer.js"></script>
+<script src="./anasium-router-mixin.js"></script>
 <!--
 `anasium-router`
 
@@ -12,67 +12,25 @@
 
 <dom-module id="anasium-router">
   <script>
-    class AnasiumRouter extends Polymer.Element {
+    class AnasiumRouter extends AnasiumRouterMixin(Polymer.Element) {
       constructor() {
-        super();
-        this.router = new RouteRecognizer();
+        super()
       }
 
       static get is() {
         return 'anasium-router';
       }
 
-      static get properties() {
-        return {
-          route: Object
-        };
-      }
-
       ready() {
-        super.ready();
+        super.ready()
+
         var routeElements = this.querySelectorAll('anasium-route');
 
         routeElements.forEach(function(routeElement) {
-          this.addRoute(routeElement.route);
+          this.addRoute(routeElement.name, routeElement.route);
         }, this);
-      }
 
-      static get observers() {
-        return [
-          '_routeChanged(route)'
-        ]
-      }
-
-      addRoute(route) {
-        this.router.add([{
-          path: route.path,
-          handler: {
-            name: route.name
-          }
-        }]);
-      }
-
-      _routeChanged(route) {
-        if (route === undefined || route.path === undefined || route.path === "undefined") {
-          // TODO (event) fallback route ?
-        } else {
-          var _result = this.router.recognize(route.path);
-
-          if (_result === undefined || _result === "undefined" || _result.length <= 0) {
-            // TODO (event) fallback route ?
-          } else {
-            var result = _result[0];
-
-            this.dispatchEvent(new CustomEvent('route-changed', {
-              detail: {
-                name: result.handler.name,
-                route: this.route,
-                params: result.params,
-                queryParams: result.queryParams
-              }
-            }));
-          }
-        }
+        this.routesLoaded = true;
       }
     }
 
