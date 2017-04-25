@@ -2,6 +2,8 @@ AnasiumRouterMixin = function(superClass) {
   return class extends superClass {
     constructor() {
       super()
+
+      this.compiledRoutes = []
     }
 
     static get properties() {
@@ -18,18 +20,15 @@ AnasiumRouterMixin = function(superClass) {
         },
 
         routes: {
-          type: Object,
-          value: function() { return {} }
+          type: Array,
+          value: function() {
+            return []
+          }
         },
 
         matchedRoute: {
           type: Object,
           notify: true
-        },
-
-        _compiledRoutes: {
-          type: Object,
-          value: function() { return {} }
         }
       }
     }
@@ -45,41 +44,52 @@ AnasiumRouterMixin = function(superClass) {
       if (!routesLoaded || path === undefined || path === null || path === "undefined") return;
 
       // get matched routes
-      var transformedPath = path.replace(/^\//, "").replace(/\/$/, "");
-      var matchedRoutes = this._matchRoute(transformedPath);
+      path = path.replace(/^\//, "").replace(/\/$/, "");
+      var matchedRoutes = this.matchRoute(path);
 
-      var sortedMatchedRoutes = matchedRoutes.sort(function(mr1, mr2) {
+      matchedRoutes = matchedRoutes.sort(function(mr1, mr2) {
         return Object.keys(mr1.params).length - Object.keys(mr2.params).length;
       });
 
-      if (sortedMatchedRoutes.length > 0) {
-        this.matchedRoute = sortedMatchedRoutes[0];
-      } else {
-        this.matchedRoute = null;
-      }
+      this.matchedRoute = (matchedRoutes.length > 0) ? matchedRoutes[0] : null;
     }
 
-    _matchRoute(path) {
-      var splittedPath = path.split("/");
-      var results = [];
+    addRoute(name, route) {
+      this.routes.push(Object.assign({}, route, {
+        name
+      }));
+      this._addCompiledRoute(name, route);
+    }
 
-      Object.keys(this._compiledRoutes).forEach(function(routeName) {
-        var route = this._compiledRoutes[routeName]; // Get the route
-        var splittedRoutePath = route.splittedPath;
+    _addCompiledRoute(name, route) {
+      var _route = Object.assign({}, route, {
+        name,
+        transformedPath: route.path.replace(/^\//, "").replace(/\/$/, ""),
+        splittedPath: route.path.replace(/^\//, "").replace(/\/$/, "").split("/")
+      });
 
-        if (splittedPath.length === splittedRoutePath.length) {
+      this.compiledRoutes.push(_route);
+    }
+
+    matchRoute(path) {
+      var splittedPath = path.split("/"); // Split the path
+      var results = []; // Array of matched routes
+
+      // Loop over routes
+      this.compiledRoutes.forEach(function(r) {
+        if (r.splittedPath.length === splittedPath.length) {
           var matched = true;
           var params = {};
 
           for (var i = 0; i < splittedPath.length; i++) {
-            var splittedPathFragment = splittedPath[i];
-            var splittedRoutePathFragment = splittedRoutePath[i];
+            var pathPart = splittedPath[i];
+            var routePathPart = r.splittedPath[i];
 
-            if (splittedPathFragment === splittedRoutePathFragment) {
+            if (pathPart === routePathPart) {
               continue;
-            } else if (splittedRoutePathFragment.startsWith(":")) {
-              var param = splittedRoutePathFragment.replace(/^:/, "");
-              params[param] = splittedPathFragment;
+            } else if (routePathPart.startsWith(":")) {
+              var param = routePathPart.replace(/^:/, "");
+              params[param] = pathPart;
             } else {
               matched = false;
               break;
@@ -87,24 +97,15 @@ AnasiumRouterMixin = function(superClass) {
           }
 
           if (matched) {
-            results.push({ name: routeName, params });
+            results.push({
+              name: r.name,
+              params
+            });
           }
         }
       }, this);
 
       return results;
-    }
-
-    addRoute(name, route) {
-      this.routes[name] = route;
-      this._addCompiledRoute(name, route);
-    }
-
-    _addCompiledRoute(name, route) {
-      this._compiledRoutes[name] = Object.assign({}, route, {
-        transformedPath: route.path.replace(/^\//, "").replace(/\/$/, ""),
-        splittedPath: route.path.replace(/^\//, "").replace(/\/$/, "").split("/")
-      });
     }
   }
 }
