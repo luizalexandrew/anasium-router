@@ -58,6 +58,40 @@ AnasiumRouterMixin = function(superClass) {
       this.matchedRoute = (matchedRoutes.length > 0) ? matchedRoutes[0] : null;
     }
 
+    getRoute(name) {
+      return this.routes.find(function(route) {
+        return route.name === name;
+      });
+    }
+
+    _getCompiledRoute(name) {
+      return this.compiledRoutes.find(function(route) {
+        return route.name === name;
+      });
+    }
+
+    generateUrl(name, params) {
+      var route = this._getCompiledRoute(name);
+      var routeString = undefined;
+
+      if (route) {
+        var splittedPath = route.splittedPath;
+        routeString = "";
+
+        for (var i = 0; i < splittedPath.length; i++) {
+          var pathPart = splittedPath[i];
+
+          if (pathPart.startsWith(":")) {
+            pathPart = params[pathPart.replace(/^:/, "")];
+          }
+
+          routeString = [routeString, pathPart].join("/");
+        }
+      }
+
+      return routeString;
+    }
+
     addRoute(name, route) {
       this.routes.push(Object.assign({}, route, {
         name
