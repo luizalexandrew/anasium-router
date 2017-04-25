@@ -51,6 +51,10 @@ AnasiumRouterMixin = function(superClass) {
         return Object.keys(mr1.params).length - Object.keys(mr2.params).length;
       });
 
+      matchedRoutes.forEach(function(r) {
+        r.queryParams = route.__queryParams;
+      })
+
       this.matchedRoute = (matchedRoutes.length > 0) ? matchedRoutes[0] : null;
     }
 
