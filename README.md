@@ -1,38 +1,23 @@
-# \<anasium-router\>
+# anasium-router
+
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/owner/my-element)
 
 
+A simple client-side router built with polymer2.
 
-## Install the Polymer-CLI
+## Installation
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
+`bower install --save anasium/anasium-router`
 
-## Viewing Your Application
-
+## Example
 ```
-$ polymer serve
-```
-
-## Building Your Application
-
-```
-$ polymer build
-```
-
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
-```
-$ polymer serve build/bundled
+<app-location route="{{route}}"></app-location>
+<anasium-router route="{{route}}" on-route-changed="_onRouteChanged">
+  <anasium-route name="home" path="/"></anasium-route>
+  <anasium-route name="post" path="/posts/:id"></anasium-route>
+</anasium-router>
 ```
 
-## Running Tests
+## License
 
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+Apache-2.0
