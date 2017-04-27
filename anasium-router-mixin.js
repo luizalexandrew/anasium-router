@@ -56,6 +56,12 @@ AnasiumRouterMixin = function(superClass) {
       })
 
       this.matchedRoute = (matchedRoutes.length > 0) ? matchedRoutes[0] : null;
+
+      this.dispatchEvent(new CustomEvent('route-changed', {
+        detail: {
+          route: Object.assign({}, this.matchedRoute)
+        }
+      }));
     }
 
     getRoute(name) {
