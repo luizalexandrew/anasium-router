@@ -1,32 +1,40 @@
 <link rel="import" href="../polymer/polymer.html">
 
-<!--
-`anasium-route`
--->
-
 <dom-module id="anasium-route">
   <script>
-  class AnasiumRoute extends Polymer.Element {
-    static get is() { return 'anasium-route'; }
+    /**
+     * `anasium-route`
+     *
+     * @customElement
+     * @polymer
+     */
+    class AnasiumRoute extends Polymer.Element {
+      static get is() { return 'anasium-route'; }
 
-    static get properties() {
-      return {
-        name: {
-          type: String,
-          reflectToAttribute: true
-        },
-        path: {
-          type: String,
-          reflectToAttribute: true
+      static get properties() {
+        return {
+          /**
+           * Route name. It must be unique as it identifies the matched route
+           */
+          name: {
+            type: String,
+            reflectToAttribute: true
+          },
+          /**
+           * Path to match against
+           */
+          path: {
+            type: String,
+            reflectToAttribute: true
+          }
         }
+      }
+
+      get route() {
+        return { path: this.path }
       }
     }
 
-    get route() {
-      return { path: this.path }
-    }
-  }
-
-  window.customElements.define(AnasiumRoute.is, AnasiumRoute);
+    window.customElements.define(AnasiumRoute.is, AnasiumRoute);
   </script>
 </dom-module>

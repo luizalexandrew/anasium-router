@@ -1,17 +1,17 @@
 <link rel="import" href="../polymer/polymer.html">
 
-<!--
-`anasium-router`
-
-
-@demo demo/index.html
--->
-
-<script src="./anasium-router-mixin.js"></script>
+<link rel="import" href="anasium-router-mixin.html">
 <link rel="import" href="anasium-route.html">
 
 <dom-module id="anasium-router">
   <script>
+    /**
+     * `anasium-router`
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
     class AnasiumRouter extends AnasiumRouterMixin(Polymer.Element) {
       constructor() {
         super()
@@ -26,7 +26,7 @@
 
         var routeElements = this.querySelectorAll('anasium-route');
 
-        routeElements.forEach(function(routeElement) {
+        routeElements.forEach(function (routeElement) {
           this.addRoute(routeElement.name, routeElement.route);
         }, this);
 
