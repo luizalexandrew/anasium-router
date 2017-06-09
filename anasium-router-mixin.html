@@ -1,5 +1,10 @@
 <script>
-  AnasiumRouterMixin = function (superClass) {
+  /**
+   * @polymerMixin
+   * @summary Router element mixin to skip heavy implementation
+   *    on element itself
+   */
+  AnasiumRouterMixin = superClass => {
     return class extends superClass {
       constructor() {
         super()
